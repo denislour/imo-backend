@@ -3,6 +3,21 @@ services:
   backend:
     build: .
     volumes:
-    - .:/app
+      - .:/app
     ports:
-    - 8000:8000
+      - 8000:8000
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: imo
+      MYSQL_USER: imo
+      MYSQL_PASSWORD: imo
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .db:/var/lib/mysql
+    ports:
+      - 3307:3306
