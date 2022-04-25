@@ -1,4 +1,5 @@
 from rest_framework.exceptions import APIException, AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,3 +37,12 @@ class LoginAPIView(APIView):
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {'message': 'success'}
         return response
+
+
+class UserAPIView(APIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)

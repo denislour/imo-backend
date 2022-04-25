@@ -85,9 +85,12 @@ DATABASES = {
         'NAME': 'imo',
         'USER': 'imo',
         'PASSWORD': 'imo',
-        'HOST': 'db',
+
         # This is INTERNAL port from db host
-        'PORT': '3306',
+        # 'HOST': 'db',
+        # 'PORT': '3306',
+        'HOST': 'localhost',
+        'PORT': '3307',
     }
 }
 
