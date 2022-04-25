@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.models import User
+from .authen import JWTAuthentication
 from .serializers import UserSerializer
 
 
@@ -30,4 +31,8 @@ class LoginAPIView(APIView):
             raise AuthenticationFailed('User not found!')
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password!')
-        return Response(UserSerializer(user).data)
+        token = JWTAuthentication.generate_jwt(user.id)
+        response = Response()
+        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.data = {'message': 'success'}
+        return response
