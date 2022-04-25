@@ -1,4 +1,4 @@
-# API register
+### API register
 POST {{host}}/api/admin/register
 Content-Type: application/json
 
@@ -8,4 +8,13 @@ Content-Type: application/json
   "email": "email2@email.com",
   "password": "a",
   "password_confirm": "a"
+}
+
+### API login
+POST {{host}}/api/admin/login
+Content-Type: application/json
+
+{
+  "email": "email2@email.com",
+  "password": "a"
 }
