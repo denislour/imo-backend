@@ -86,9 +86,11 @@ DATABASES = {
         'USER': 'imo',
         'PASSWORD': 'imo',
 
-        # This is INTERNAL port from db host
+        # This is INTERNAL port from db host (Docker)
         # 'HOST': 'db',
         # 'PORT': '3306',
+
+        # Debug from localhost
         'HOST': 'localhost',
         'PORT': '3307',
     }
