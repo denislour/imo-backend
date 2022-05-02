@@ -48,6 +48,18 @@ class UserAPIView(APIView):
         return Response(UserSerializer(request.user).data)
 
 
+class UsersAPIView(APIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+
+        return Response(serializer.data)
+
+
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
