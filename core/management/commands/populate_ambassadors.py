@@ -1,4 +1,3 @@
-import imp
 from django.core.management import BaseCommand
 
 from core.models import User
