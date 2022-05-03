@@ -201,6 +201,14 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get user links",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
