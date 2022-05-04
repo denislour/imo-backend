@@ -14,7 +14,7 @@ class RegisterAPIView(APIView):
         data = request.data
         if data.get('password') != data.get('password_confirm'):
             return APIException('Password does not match!!!')
-        data['is_ambassador'] = 0
+        data['is_ambassador'] = 'api/ambassador' in request.path
         serializer = UserSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -28,11 +28,19 @@ class LoginAPIView(APIView):
         password = request.data.get('password')
 
         user = User.objects.filter(email=email).first()
+
         if user is None:
             raise AuthenticationFailed('User not found!')
+
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password!')
-        token = JWTAuthentication.generate_jwt(user.id)
+
+        scope = 'ambassador' if 'api/ambassador' in request.path else 'admin'
+
+        if user.is_ambassador and scope == 'admin':
+            raise AuthenticationFailed('Unauthorized!')
+
+        token = JWTAuthentication.generate_jwt(user.id, scope)
         response = Response()
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {'message': 'success'}

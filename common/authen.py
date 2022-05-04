@@ -11,6 +11,7 @@ from core.models import User
 class JWTAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
+        is_ambassador = 'api/ambassador' in request.path
         token = request.COOKIES.get('jwt')
         if not token:
             return None
@@ -23,12 +24,17 @@ class JWTAuthentication(BaseAuthentication):
         if user is None:
             raise AuthenticationFailed('User not found!')
 
+        if is_ambassador and payload.get('scope') != 'ambassador' or (
+                not is_ambassador and payload.get('scope') != 'admin'):
+            raise AuthenticationFailed('Invalid Scope!')
+
         return user, None
 
     @staticmethod
-    def generate_jwt(user_id):
+    def generate_jwt(user_id, scope):
         payload = {
             'user_id': user_id,
+            'scope': scope,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
             'iat': datetime.datetime.utcnow(),
         }
